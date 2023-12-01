@@ -13,8 +13,10 @@
 
     # and the value in the vector in the received message. 
 
+# Import necessary modules
 from datetime import datetime
 
+# class for vector_clocks. 
 class vector_clocks:
     def __init__(self):
         self.current_time = datetime.now()

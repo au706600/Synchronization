@@ -1,18 +1,24 @@
 
 
+# Import the necessary modules. 
 from threading import Thread
+
 from multiprocessing import Pipe
 
 from Lamport_timestamp import lamport_timestamp
+
 from os import getpid
+
+# This section, we test the Lamport_timestamp implementation from lamport_timestamp class,
+# by defining the different 3 processes and in each processes, we call events that are gonna happen. 
+# After defining the processes. We use the Pipe() to connect them and that are representing distributed systems. 
 
 # The different pipes are used to create connection between processes. 
 # For example, pipe 12 is for process one and two, pipe 32 is for process
 # three and two and so on. 
 
-
 # Different processes are created so that it represents a distributed system with threads
-# Pipe
+# and Pipe. 
 
 def process_one(pipe12, pipe13):
 
@@ -76,11 +82,18 @@ if __name__ == '__main__':
 
     #---------------------------------------------------
 
+# Import the necessary modules. 
 from threading import Thread
 from multiprocessing import Pipe
 
 from vector_clock import vector_clocks
 
+
+# This section, we test the vector_clock implementation from vector_clocks class,
+# by defining the different 3 processes and in each processes, we call events that are gonna happen. 
+# After defining the processes. We use the Pipe() to connect the processes and that are representing distributed systems. 
+
+# This is the first test-case: 
 
 def one_process(pipe12, pipe13):
     vectorclock = vector_clocks()
@@ -145,7 +158,7 @@ if __name__ == '__main__':
 
 #-----------
 
-# second test case
+# second test case for vector_clock
 
 from threading import Thread
 from multiprocessing import Pipe

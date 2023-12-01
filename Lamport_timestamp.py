@@ -16,45 +16,70 @@
 
 # Initialize by setting the process counters with the value of 0
 
+# Import necessary modules
 from datetime import datetime
 
+# lamport timestamp class
 class lamport_timestamp:
+    # Initialize initial time and counter process 
+    # and all the necessary initialization that might be needed. 
     def __init__(self):
         self.current_time = datetime.now()
         self.counter_process = 0
 
+        # function to return the local time and lamport time
     def local_time(self):
         return f" Lamport time = {self.counter_process}, Local time = {self.current_time}. "
 
-# This function has the purpose of...
+# This function has the purpose of incrementing the process counter for 
+# each event (internal event, message sending, message receiving) in that process
     def increment_process(self, id):
+        # Increment the process counter
         self.counter_process += 1
 
+        # Print the local time and lamport time
         print(" An event happened at: " + str(id) + str(self.local_time()))
+        # return
         return self.counter_process
     
-# This function has the purpose of...
+# This function has the purpose of finding the maximum value of the process counter and the timestamp in the received message
     def max_process(self, timestamp_received):
-        timestamp_received = timestamp_received["timestamp"]
+        # This line accepts a dictionary with the process id. 
+        timestamp_received = timestamp_received["Lamport-timestamp"] 
+        # Find maximum value of the process counter and the timestamp in the received message and increment
         increment = max(self.counter_process, timestamp_received) + 1
+        # return
         return increment
     
 
-# This function has the purpose of...
+# This function has the purpose of receiving a message from the sender process
     def received_signal(self, pipe, id):
+        # pipe.recv() function receives the message from the sender process
         timestamp = pipe.recv()
+        # Find maximum value of the process counter and the timestamp in the received message
+        # by calling function
         self.counter_process = self.max_process(timestamp)
+        # increment after finding the maximum
         self.increment_process(id)
-        print(f" Message received at: {id} {self.local_time()} sent from {timestamp}")
+        # print the message received from the sender process and which process
+        # it comes from. 
+        print(f' Message received at: {id} {self.local_time()} sent from {timestamp}')
+        # return
         return self.counter_process
+
     
-# This function has the purpose of...
+# This function has the purpose of sending a message to the recipient process
     def send_signal(self, pipe, id):
-        self.counter_process = self.increment_process(id)
-        message = {"process": id, "timestamp": self.counter_process}
-        pipe.send(message)
-        print(f" Message sent from: + {id} + {self.local_time()}")
-        return self.counter_process
+        # increment the process counter
+        self.counter_process = self.increment_process(id) 
+        # create a dictionary with the process id and timestamp
+        message = {"process-Id": id, "Lamport-timestamp": self.counter_process} 
+        # send the message with the process id to the recipient process by using pipe.send()
+        pipe.send(message) 
+        # print the message sent
+        print(f" Message sent from process-Id: {id} and {self.local_time()}") 
+        # return the process counter
+        return self.counter_process 
 
 
 
