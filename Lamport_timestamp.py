@@ -21,7 +21,7 @@ from datetime import datetime
 class lamport_timestamp:
     def __init__(self):
         self.current_time = datetime.now()
-        self.counter_process = self.current_time
+        self.counter_process = 0
 
     def local_time(self):
         return f" Lamport time = {self.counter_process}, Local time = {self.current_time}. "
@@ -44,7 +44,8 @@ class lamport_timestamp:
     def received_signal(self, pipe, id):
         timestamp = pipe.recv()
         self.counter_process = self.max_process(timestamp)
-        print(f" Message received at: {id}, {self.local_time()} sent from {timestamp}")
+        self.increment_process(id)
+        print(f" Message received at: {id} {self.local_time()} sent from {timestamp}")
         return self.counter_process
     
 # This function has the purpose of...
@@ -52,7 +53,7 @@ class lamport_timestamp:
         self.counter_process = self.increment_process(id)
         message = {"process": id, "timestamp": self.counter_process}
         pipe.send(message)
-        print(f" Message sent from: {id}, {self.local_time()}")
+        print(f" Message sent from: + {id} + {self.local_time()}")
         return self.counter_process
 
 
