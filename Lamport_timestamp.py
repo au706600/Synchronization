@@ -35,6 +35,7 @@ class lamport_timestamp:
     
 # This function has the purpose of...
     def max_process(self, timestamp_received):
+        timestamp_received = timestamp_received["timestamp"]
         increment = max(self.counter_process, timestamp_received) + 1
         return increment
     
@@ -43,14 +44,15 @@ class lamport_timestamp:
     def received_signal(self, pipe, id):
         timestamp = pipe.recv()
         self.counter_process = self.max_process(timestamp)
-        print(f" Message received at: {str(id)} {self.local_time()} sent from {timestamp} ")
+        print(f" Message received at: {id}, {self.local_time()} sent from {timestamp}")
         return self.counter_process
     
 # This function has the purpose of...
     def send_signal(self, pipe, id):
         self.counter_process = self.increment_process(id)
-        pipe.send(self.counter_process)
-        print(" Message sent from: " + str(id) + str(self.local_time()))
+        message = {"process": id, "timestamp": self.counter_process}
+        pipe.send(message)
+        print(f" Message sent from: {id}, {self.local_time()}")
         return self.counter_process
 
 

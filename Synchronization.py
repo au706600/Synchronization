@@ -16,7 +16,7 @@ from os import getpid
 
 def process_one(pipe12, pipe13):
 
-    process = lamport_timestamp()
+    process = lamport_timestamp() 
     id = getpid()
     process.counter_process = 0
 
