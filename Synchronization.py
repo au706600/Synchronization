@@ -32,6 +32,7 @@ def process_one(pipe12, pipe13):
     process.increment_process(id)
     process.increment_process(id)
     process.received_signal(pipe13, id)
+    process.increment_process(id)
     process.received_signal(pipe12, id)
     process.send_signal(pipe12, id)
     process.send_signal(pipe13, id)
@@ -115,38 +116,33 @@ def one_process(pipe12, pipe13):
 
     vectorclock.increment_vector(id) 
     vectorclock.send_signal(pipe12, id) 
-    vectorclock.counter_process_vector = vectorclock.received_signal(pipe12, id)
-    #vectorclock.received_signal(pipe12, id) 
-    vectorclock.send_signal(pipe13, id)
-    vectorclock.counter_process_vector = vectorclock.received_signal(pipe12, id)
-    #vectorclock.received_signal(pipe13, id) 
-    vectorclock.send_signal(pipe12, id)
     vectorclock.increment_vector(id)
+    vectorclock.received_signal(pipe13, id)
+    vectorclock.send_signal(pipe12, id)
 
 # Process two
-#def two_process(pipe21, pipe23):
-def two_process(pipe21):
+def two_process(pipe21, pipe23):
     vectorclock = vector_clocks()
     id = 1
     vectorclock.counter_process_vector = [0,0,0]
 
-    vectorclock.send_signal(pipe21, id)
-    vectorclock.counter_process_vector = vectorclock.received_signal(pipe21, id)
-    vectorclock.counter_process_vector = vectorclock.received_signal(pipe21, id)
-    #vectorclock.received_signal(pipe21, id)
-    #vectorclock.received_signal(pipe21, id) 
+    vectorclock.increment_vector(id)
+    vectorclock.received_signal(pipe21, id)
+    vectorclock.increment_vector(id)
+    vectorclock.send_signal(pipe23, id)
+    vectorclock.increment_vector(id)
+    vectorclock.received_signal(pipe21, id)
 
 # Process three
-#def three_process(pipe32, pipe31):
-def three_process(pipe31):
+def three_process(pipe31, pipe32):
     vectorclock = vector_clocks()
     id = 2
     vectorclock.counter_process_vector = [0,0,0]
 
     vectorclock.increment_vector(id)
+    vectorclock.received_signal(pipe32, id)
+    vectorclock.increment_vector(id)
     vectorclock.send_signal(pipe31, id)
-    vectorclock.counter_process_vector = vectorclock.received_signal(pipe31, id)
-    #vectorclock.received_signal(pipe31, id)
 
 if __name__ == '__main__':
     
@@ -163,12 +159,12 @@ if __name__ == '__main__':
     # This thread have the function process_two() and the arguments are the pipes.
     # Thread() have the purpose of running the process in a different thread.
     threadtwo = Thread(target = two_process, 
-                    args = (twoandone, ))
+                    args = (twoandone, twoandthree))
     
     # This thread have the function process_three() and the arguments are the pipes.
     # Thread() have the purpose of running the process in a different thread.
     threadthree = Thread(target = three_process, 
-                        args = (threeandone, ))
+                        args = (threeandone, threeandtwo))
     
     # Start the threads
     threadone.start()
@@ -204,7 +200,7 @@ def one_process(pipe12):
     vectorclock.increment_vector(id) 
     vectorclock.send_signal(pipe12, id)
     vectorclock.increment_vector(id)
-    vectorclock.counter_process_vector = vectorclock.received_signal(pipe12, id)
+    vectorclock.received_signal(pipe12, id)
     vectorclock.increment_vector(id)
 
 # Process two
@@ -215,8 +211,8 @@ def two_process(pipe21, pipe23):
     vectorclock.counter_process_vector = [0,0,0]
 
     vectorclock.increment_vector(id)
-    vectorclock.counter_process_vector = vectorclock.received_signal(pipe21, id)
-    vectorclock.counter_process_vector = vectorclock.received_signal(pipe23, id)
+    vectorclock.received_signal(pipe21, id)
+    vectorclock.received_signal(pipe23, id)
     vectorclock.send_signal(pipe21, id)
     vectorclock.increment_vector(id)
 
@@ -234,7 +230,7 @@ if __name__ == '__main__':
     # Defining the pipes in order to connect them.
     oneandtwo, twoandone = Pipe()
     twoandthree, threeandtwo = Pipe()
-    oneandthree, threeandone = Pipe()
+    #oneandthree, threeandone = Pipe()
 
     # This thread have the function process_one() and the arguments are the pipes.
     # Thread() have the purpose of running the process in a different thread.

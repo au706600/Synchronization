@@ -27,7 +27,7 @@ class vector_clocks:
     # and 3 processes, we have v(p0, p1, p2) with v being the vector. 
     def __init__(self):
         self.current_time = datetime.now()
-        self.counter_process_vector = [0,0,0] 
+        self.counter_process_vector = [0,0,0]
 
         # This function returns the lamport time and current time. 
     def local_time(self):
