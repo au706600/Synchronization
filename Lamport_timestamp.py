@@ -37,7 +37,7 @@ class lamport_timestamp:
         # Increment the process counter
         self.counter_process += 1
 
-        # Print the local time and lamport time
+        # Print the lamport time and local time. 
         print(" An event happened at: " + str(id) + str(self.local_time()))
         # return
         return self.counter_process
