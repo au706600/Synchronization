@@ -9,9 +9,11 @@ from Lamport_timestamp import lamport_timestamp
 
 from os import getpid
 
-# This section, we test the Lamport_timestamp implementation from lamport_timestamp class,
-# by defining the different 3 processes and in each processes, we call events that are gonna happen. 
-# After defining the processes. We use the Pipe() to connect them and that are representing distributed systems. 
+# This section, we test the Lamport_timestamp implementation from lamport_timestamp class
+# by creating 3 different processes and in each processes, we envoke events by calling them from our class. In each process, 
+# we want the id's it to be unique by using the getpid() function and increment it by 1 in process 2 and 2 in process 3. In each
+# process, we initialize the counter to 0. After defining the processes. We use the Pipe() to connect them and that are representing distributed systems.
+# We update the counter/timestamps by envoking the different events. 
 
 # The different pipes are used to create connection between processes. 
 # For example, pipe 12 is for process one and two, pipe 32 is for process
@@ -53,20 +55,22 @@ def process_three(pipe31):
     process.received_signal(pipe31, id) 
 
 
+# In order to run the different processes, we need to start them by using Pipe() to connect them
+# and then we need to join them by using join() function from threads.
 if __name__ == '__main__':
     oneandtwo, twoandone = Pipe()
     twoandthree, threeandtwo = Pipe()
     oneandthree, threeandone = Pipe()
 
-    # Create a thread that...
+    # Create a thread that represents process one.
     thread1 = Thread(target = process_one,
                      args = (oneandtwo, oneandthree)) 
     
-    # This thread...
+    # This thread to represent process two.
     thread2 = Thread(target = process_two,
                      args = (twoandone, ))
     
-    # This thread...
+    # This thread to represent process three. 
     thread3 = Thread(target = process_three,
                      args = (threeandone, ))
     
@@ -75,7 +79,7 @@ if __name__ == '__main__':
     thread2.start()
     thread3.start()
 
-    # Flow of execution
+    # Flow of execution. After all the processes have run, quit the program.
     thread1.join()
     thread2.join()
     thread3.join()
@@ -91,7 +95,8 @@ from vector_clock import vector_clocks
 
 # This section, we test the vector_clock implementation from vector_clocks class,
 # by defining the different 3 processes and in each processes, we call events that are gonna happen. 
-# After defining the processes. We use the Pipe() to connect the processes and that are representing distributed systems. 
+# After defining the processes. We use the Pipe() to connect the processes and that are representing distributed systems
+# like the lamport timestamp implementation. We update the counter/timestamps by envoking the different events (see above)
 
 # This is the first test-case: 
 
