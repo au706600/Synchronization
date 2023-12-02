@@ -22,6 +22,7 @@ from os import getpid
 # Different processes are created so that it represents a distributed system with threads
 # and Pipe. 
 
+# Process one
 def process_one(pipe12, pipe13):
 
     process = lamport_timestamp() 
@@ -34,7 +35,8 @@ def process_one(pipe12, pipe13):
     process.received_signal(pipe12, id)
     process.send_signal(pipe12, id)
     process.send_signal(pipe13, id)
-      
+
+# Process two
 #def process_two(pipe21, pipe23):
 def process_two(pipe21):
     process = lamport_timestamp()
@@ -46,6 +48,7 @@ def process_two(pipe21):
     process.increment_process(id)
     
 
+# Process three
 def process_three(pipe31):
     process = lamport_timestamp()
     id = getpid() + 2
@@ -58,19 +61,23 @@ def process_three(pipe31):
 # In order to run the different processes, we need to start them by using Pipe() to connect them
 # and then we need to join them by using join() function from threads.
 if __name__ == '__main__':
+    # Defining the pipes in order to connect them. 
     oneandtwo, twoandone = Pipe()
     twoandthree, threeandtwo = Pipe()
     oneandthree, threeandone = Pipe()
 
-    # Create a thread that represents process one.
+    # This thread have the function process_one() and the arguments are the pipes.
+    # Thread() have the purpose of running the process in a different thread.
     thread1 = Thread(target = process_one,
                      args = (oneandtwo, oneandthree)) 
     
-    # This thread to represent process two.
+    # This thread have the function process_two() and the arguments are the pipes.
+    # Thread() have the purpose of running the process in a different thread.
     thread2 = Thread(target = process_two,
                      args = (twoandone, ))
     
-    # This thread to represent process three. 
+     # This thread have the function process_three() and the arguments are the pipes.
+     # Thread() have the purpose of running the process in a different thread.
     thread3 = Thread(target = process_three,
                      args = (threeandone, ))
     
@@ -100,6 +107,7 @@ from vector_clock import vector_clocks
 
 # This is the first test-case: 
 
+# Process one
 def one_process(pipe12, pipe13):
     vectorclock = vector_clocks()
     id = 0
@@ -115,6 +123,7 @@ def one_process(pipe12, pipe13):
     vectorclock.send_signal(pipe12, id)
     vectorclock.increment_vector(id)
 
+# Process two
 #def two_process(pipe21, pipe23):
 def two_process(pipe21):
     vectorclock = vector_clocks()
@@ -127,6 +136,7 @@ def two_process(pipe21):
     #vectorclock.received_signal(pipe21, id)
     #vectorclock.received_signal(pipe21, id) 
 
+# Process three
 #def three_process(pipe32, pipe31):
 def three_process(pipe31):
     vectorclock = vector_clocks()
@@ -140,23 +150,32 @@ def three_process(pipe31):
 
 if __name__ == '__main__':
     
+    # Defining the pipes in order to connect them.
     oneandtwo, twoandone = Pipe()
     twoandthree, threeandtwo = Pipe()
     oneandthree, threeandone = Pipe()
 
+    # This thread have the function process_one() and the arguments are the pipes.
+    # Thread() have the purpose of running the process in a different thread.
     threadone = Thread(target = one_process, 
                     args=(oneandtwo, oneandthree))
     
+    # This thread have the function process_two() and the arguments are the pipes.
+    # Thread() have the purpose of running the process in a different thread.
     threadtwo = Thread(target = two_process, 
                     args = (twoandone, ))
     
+    # This thread have the function process_three() and the arguments are the pipes.
+    # Thread() have the purpose of running the process in a different thread.
     threadthree = Thread(target = three_process, 
                         args = (threeandone, ))
     
+    # Start the threads
     threadone.start()
     threadtwo.start()
     threadthree.start()
 
+    # Flow of execution. After all the processes have run, quit the program.
     threadone.join()
     threadtwo.join()
     threadthree.join()
@@ -164,12 +183,19 @@ if __name__ == '__main__':
 #-----------
 
 # second test case for vector_clock
-
+# Import the necessary modules.
 from threading import Thread
 from multiprocessing import Pipe
 
 from vector_clock import vector_clocks
 
+# This section, we test the vector_clock implementation from vector_clocks class,
+# by defining the different 3 processes and in each processes, we call events that are gonna happen.
+# After defining the processes. We use the Pipe() to connect the processes and that are representing distributed systems
+
+# This is the second test-case:
+
+# Process one
 def one_process(pipe12):
     vectorclock = vector_clocks()
     id = 0
@@ -181,6 +207,7 @@ def one_process(pipe12):
     vectorclock.counter_process_vector = vectorclock.received_signal(pipe12, id)
     vectorclock.increment_vector(id)
 
+# Process two
 #def two_process(pipe21, pipe23):
 def two_process(pipe21, pipe23):
     vectorclock = vector_clocks()
@@ -193,6 +220,7 @@ def two_process(pipe21, pipe23):
     vectorclock.send_signal(pipe21, id)
     vectorclock.increment_vector(id)
 
+# Process three
 #def three_process(pipe32, pipe31):
 def three_process(pipe32):
     vectorclock = vector_clocks()
@@ -203,24 +231,33 @@ def three_process(pipe32):
     vectorclock.increment_vector(id)
 
 if __name__ == '__main__':
-    
+    # Defining the pipes in order to connect them.
     oneandtwo, twoandone = Pipe()
     twoandthree, threeandtwo = Pipe()
     oneandthree, threeandone = Pipe()
 
+    # This thread have the function process_one() and the arguments are the pipes.
+    # Thread() have the purpose of running the process in a different thread.
     threadone = Thread(target = one_process, 
                     args=(oneandtwo, ))
     
+    # This thread have the function process_two() and the arguments are the pipes.
+    # Thread() have the purpose of running the process in a different thread.
     threadtwo = Thread(target = two_process, 
                     args = (twoandone, twoandthree))
     
+
+    # This thread have the function process_three() and the arguments are the pipes.
+    # Thread() have the purpose of running the process in a different thread.
     threadthree = Thread(target = three_process, 
                         args = (threeandtwo, ))
     
+    # Start the threads
     threadone.start()
     threadtwo.start()
     threadthree.start()
 
+    # Flow of execution. After all the processes have run, quit the program.
     threadone.join()
     threadtwo.join()
     threadthree.join()
