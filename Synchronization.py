@@ -118,7 +118,7 @@ def one_process(pipe12, pipe13):
     vectorclock.send_signal(pipe12, id) 
     vectorclock.increment_vector(id)
     vectorclock.received_signal(pipe13, id)
-    vectorclock.send_signal(pipe12, id)
+    vectorclock.increment_vector(id)
 
 # Process two
 def two_process(pipe21, pipe23):
@@ -131,7 +131,6 @@ def two_process(pipe21, pipe23):
     vectorclock.increment_vector(id)
     vectorclock.send_signal(pipe23, id)
     vectorclock.increment_vector(id)
-    vectorclock.received_signal(pipe21, id)
 
 # Process three
 def three_process(pipe31, pipe32):
