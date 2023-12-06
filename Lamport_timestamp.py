@@ -29,7 +29,7 @@ class lamport_timestamp:
 
         # function to return the local time and lamport time
     def local_time(self):
-        return f" Lamport time = {self.counter_process}, Local time = {self.current_time}. "
+        return f" Lamport time = {self.counter_process}. "
 
 # This function has the purpose of incrementing the process counter for 
 # each event (internal event, message sending, message receiving) in that process

@@ -31,7 +31,7 @@ class vector_clocks:
 
         # This function returns the lamport time and current time. 
     def local_time(self):
-        return f" Lamport time = {self.counter_process_vector}, Local time = {self.current_time} "
+        return f" Lamport time = {self.counter_process_vector} "
     
     # This function increments the vector clocks of the process with id.
     # It's the same as lamport timestamp, but instead with vector, which we increment by incrementing
